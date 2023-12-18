@@ -14,7 +14,6 @@ def get_matrix_size():
             mb.showerror("Error!","The size of the matrix must be positive integers")
             raise ValueError
         
-        
         return size_matrix
     except ValueError:
         return None
@@ -56,21 +55,50 @@ def creat_matrix(frame_matrix, label):
                 for col in range(size_matrix):
                     entry_B[row][col].grid(row=row, column=col, padx=5, pady=5)
 
-def erase_matrix(frame_matrix, label):
+def erase_matrix(frame_matrix, label, matrix_type, result_label):
     for widget in frame_matrix.winfo_children():
         widget.destroy()
     label.grid_forget()
+    result_label.config(text="")
+    global entry_A, entry_B, entry_C, matrix_A, matrix_B, vector_C
+    if matrix_type == 'A':
+        entry_A = None
+        matrix_A = None
+    elif matrix_type == 'B':
+        entry_B = None
+        matrix_B = None
+    elif matrix_type == 'C':
+        entry_C = None
+        vector_C = None
 
 def get_value_matrix(frame_matrix):
     size_matrix = get_matrix_size()
     if size_matrix is not None:
         try:
-            global matrix_A, matrix_B, vector_C
+            global entry_A, entry_B, entry_C, matrix_A, matrix_B, vector_C
             if frame_matrix.winfo_exists() and frame_matrix is frame_matrix_A:
+                if 'entry_A' not in globals():
+                    mb.showerror("Error", "Please create matrix 1 first")
+                    return False
+                if entry_A is None:
+                    mb.showerror("Error", "Please create matrix 1 first")
+                    return False
                 matrix_A = [[int(entry_A[row][col].get()) for col in range(size_matrix)] for row in range(size_matrix)]
             elif frame_matrix.winfo_exists() and frame_matrix is frame_matrix_B:
+                if 'entry_B' not in globals():
+                    mb.showerror("Error", "Please create matrix 2 first")
+                    return False
+                if entry_B is None:
+                    mb.showerror("Error", "Please create matrix 2 first")
+                    return False
                 matrix_B = [[int(entry_B[row][col].get()) for col in range(size_matrix)] for row in range(size_matrix)]
             elif frame_matrix.winfo_exists() and frame_matrix is frame_matrix_C:
+                if 'entry_C' not in globals():
+                    mb.showerror("Error", "Please create vector result first")
+                    return False
+                if entry_C is None:
+                    mb.showerror("Error", "Please create vector result first")
+                    return False
                 vector_C = [int(entry_C[row].get()) for row in range(size_matrix)]
             else:
                 return False
@@ -88,9 +116,9 @@ def matrix_calculation(n):
                 text_inv = f"- Inverse of matrix 1:\n {x}\n"
             except np.linalg.LinAlgError:
                 text_inv = "- Inverse of matrix 1 is not exist"
-            label_resutl.config(text=f"- Rank of matrix 1: {np.linalg.matrix_rank(matrix_A)}\n"
+            label_resutl_A.config(text=f"- Rank of matrix 1: {np.linalg.matrix_rank(matrix_A)}\n"
                                 + f"- Trace of matrix 1: {np.trace(matrix_A)}\n"
-                                + f"- Determinant of a matrix 1: {np.linalg.det(matrix_A)}\n"
+                                + f"- Determinant of a matrix 1: {np.round(np.linalg.det(matrix_A), 2)}\n"
                                 + text_inv
                                 + f"- An eigen value of a matrix 1:\n {np.linalg.eig(matrix_A)[0]}\n"
                                 + f"- An eigen vector of a matrix 1:\n {np.linalg.eig(matrix_A)[1]}\n")
@@ -102,9 +130,9 @@ def matrix_calculation(n):
                 text_inv = f"- Inverse of matrix 2:\n {x}\n"
             except np.linalg.LinAlgError:
                 text_inv = "- Inverse of matrix 2 is not exist"
-            label_resutl.config(text=f"- Rank of matrix 2: {np.linalg.matrix_rank(matrix_B)}\n"
+            label_resutl_B.config(text=f"- Rank of matrix 2: {np.linalg.matrix_rank(matrix_B)}\n"
                                 + f"- Trace of matrix 2: {np.trace(matrix_B)}\n"
-                                + f"- Determinant of a matrix 2: {np.linalg.det(matrix_B)}\n"
+                                + f"- Determinant of a matrix 2: {np.round(np.linalg.det(matrix_B), 2)}\n"
                                 + text_inv
                                 + f"- An eigen value of a matrix 2:\n {np.linalg.eig(matrix_B)[0]}\n"
                                 + f"- An eigen vector of a matrix 2:\n {np.linalg.eig(matrix_B)[1]}\n")
@@ -128,7 +156,7 @@ frame_A.grid(row=1, column=0, padx=5, pady=5)
 creat_A = Button(frame_A, text="Creat matrix 1", command=lambda: creat_matrix(frame_matrix_A, label_A))
 creat_A.grid(row=0, column=0)
 
-erase_A = Button(frame_A, text="Erase matrix 1", command=lambda: erase_matrix(frame_matrix_A, label_A))
+erase_A = Button(frame_A, text="Erase matrix 1", command=lambda: erase_matrix(frame_matrix_A, label_A, 'A', label_resutl_A))
 erase_A.grid(row=0, column=1)
 
 label_A = Label(frame_A, text="Entry matrix 1:")
@@ -143,7 +171,7 @@ frame_B.grid(row=1, column=1, padx=5, pady=5)
 creat_B = Button(frame_B, text="Creat matrix 2", command=lambda: creat_matrix(frame_matrix_B, label_B))
 creat_B.grid(row=0, column=0)
 
-erase_B = Button(frame_B, text="Erase matrix 2", command=lambda: erase_matrix(frame_matrix_B, label_B))
+erase_B = Button(frame_B, text="Erase matrix 2", command=lambda: erase_matrix(frame_matrix_B, label_B, 'B', label_resutl_B))
 erase_B.grid(row=0, column=1)
 
 label_B = Label(frame_B, text="Entry matrix 2:")
@@ -157,7 +185,7 @@ frame_C.grid(row=1, column=2, padx=5, pady=5)
 creat_C = Button(frame_C, text="Creat vector result", command=lambda: creat_matrix(frame_matrix_C, label_C))
 creat_C.grid(row=0, column=0)
 
-erase_C = Button(frame_C, text="Erase vector result", command=lambda: erase_matrix(frame_matrix_C, label_C))
+erase_C = Button(frame_C, text="Erase vector result", command=lambda: erase_matrix(frame_matrix_C, label_C, 'C'))
 erase_C.grid(row=0, column=1)
 
 label_C = Label(frame_C, text="Entry vector result:")
@@ -174,8 +202,10 @@ button_cal_basic.grid(row=0, column=0, padx=5, pady=5)
 button_cal_basic = Button(frame_choose_cal, text="Cal matrix 2", command=lambda: matrix_calculation(2))
 button_cal_basic.grid(row=0, column=1, padx=5, pady=5)
 
-label_resutl = Label(w, text="", justify='left', font=('Helvetica',10, 'bold'))
-label_resutl.grid(row=3, column=0)
+label_resutl_A = Label(w, text="", justify='left', font=('Helvetica',10, 'bold'))
+label_resutl_A.grid(row=3, column=0)
+label_resutl_B = Label(w, text="", justify='left', font=('Helvetica',10, 'bold'))
+label_resutl_B.grid(row=3, column=1)
 
 w.mainloop()
 
@@ -195,9 +225,9 @@ w.mainloop()
 # print("Giá trị riêng: \n", d)
 # print("Vectors riêng: \n", e)
 
-#Tính tích 2 vector
+#Tính tích 2 ma trận
 # # print("Tích hai ma trận: \n",np.dot(a,b))
-# # print("Tích vô hướng hai vector: \n",np.vdot(a,b))
+# # print("Tích vô hướng hai ma trận: \n",np.vdot(a,b))
 
 #Tính nghiệm của hệ phương trình 
 # print("Nghiệm hệ phương trình: \n",np.linalg.solve(a,c))
