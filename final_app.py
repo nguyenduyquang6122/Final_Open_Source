@@ -59,6 +59,8 @@ def erase_matrix(frame_matrix, label, matrix_type, result_label):
     for widget in frame_matrix.winfo_children():
         widget.destroy()
     label.grid_forget()
+    if frame_matrix is not frame_matrix_C:
+        label_result_X.config(text="")
     result_label.config(text="")
     global entry_A, entry_B, entry_C, matrix_A, matrix_B, vector_C
     if matrix_type == 'A':
@@ -140,21 +142,23 @@ def matrix_calculation(n):
         mb.showinfo("Thông báo!", "Bạn đã chọn tính tích hai ma trận")
         if get_value_matrix(frame_matrix_A) and get_value_matrix(frame_matrix_B):
             try:
-                result = np.dot(matrix_A, matrix_B)
-                label_result_D.config(text="Kết quả tính tích hai ma trận:\n" + str(result))
+                result_1 = np.dot(matrix_A, matrix_B)
+                result_2 = np.vdot(matrix_A, matrix_B)
+                label_result_X.config(text=f"-Tích hai ma trận:\n {result_1}\n"
+                                      + f"-Tích vô hướng hai ma trận:\n {result_2}")
             except ValueError:
                 mb.showerror("Lỗi",
                              "Hai ma trận không thể nhân với nhau vì số cột của ma trận thứ nhất không bằng số hàng của ma trận thứ hai")
-    if n == 4:
-        mb.showinfo("Thông báo!", "Bạn đã chọn tính tích vô hướng hai vector")
-        if get_value_matrix(frame_matrix_A) and get_value_matrix(frame_matrix_B):
-            try:
-                vector_A = np.squeeze(matrix_A)
-                vector_B = np.squeeze(matrix_B)
-                result = np.dot(vector_A, vector_B)
-                label_result_E.config(text="Kết quả tích vô hướng 2 vector:\n" + str(result))
-            except ValueError:
-                mb.showerror("Lỗi", "Hai vector không cùng kích thước")
+    # if n == 4:
+    #     mb.showinfo("Thông báo!", "Bạn đã chọn tính tích vô hướng hai vector")
+    #     if get_value_matrix(frame_matrix_A) and get_value_matrix(frame_matrix_B):
+    #         try:
+    #             vector_A = np.squeeze(matrix_A)
+    #             vector_B = np.squeeze(matrix_B)
+    #             result = np.dot(vector_A, vector_B)
+    #             label_result_E.config(text="Kết quả tích vô hướng 2 vector:\n" + str(result))
+    #         except ValueError:
+    #             mb.showerror("Lỗi", "Hai vector không cùng kích thước")
 
 w = Tk()
 w.title("Ứng dụng hỗ trợ môn học ĐSTT")
@@ -219,22 +223,16 @@ button_cal_basic.grid(row=0, column=0, padx=5, pady=5)
 button_cal_basic = Button(frame_choose_cal, text="Tính ma trận 2", command=lambda: matrix_calculation(2))
 button_cal_basic.grid(row=0, column=1, padx=5, pady=5)
 
-#nút tính tích 2 ma trận
 button_cal_multiply = Button(frame_choose_cal, text="Tính tích hai ma trận", command=lambda: matrix_calculation(3))
 button_cal_multiply.grid(row=0, column=2, padx=5, pady=5)
-#nút tính tích vô hướng
-button_cal_dot_product = Button(frame_choose_cal, text="Tính tích vô hướng", command=lambda: matrix_calculation(4))
-button_cal_dot_product.grid(row=0, column=3, padx=5, pady=5)
+
 
 label_resutl_A = Label(w, text="", justify='left', font=('Helvetica',10, 'bold'))
 label_resutl_A.grid(row=3, column=0)
 label_resutl_B = Label(w, text="", justify='left', font=('Helvetica',10, 'bold'))
 label_resutl_B.grid(row=3, column=1)
-label_result_D = Label(w, text="", justify='left', font=('Helvetica', 10, 'bold'))
-label_result_D.grid(row=4, column=0, columnspan=3, pady=10)
-label_result_E = Label(w, text="", justify='left', font=('Helvetica', 10, 'bold'))
-label_result_E.grid(row=4, column=1, columnspan=3, pady=10)
-
+label_result_X = Label(w, text="", justify='left', font=('Helvetica', 10, 'bold'))
+label_result_X.grid(row=3, column=2)
 
 
 
