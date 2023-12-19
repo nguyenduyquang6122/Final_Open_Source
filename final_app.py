@@ -5,13 +5,13 @@ from tkinter import messagebox as mb
 
 def get_matrix_size():
     if not size_entry.get():
-        mb.showwarning("Warning!", "Please enter a value for the matrix size")
+        mb.showwarning("Cảnh báo!", "Vui lòng nhập giá trị cho kích thước ma trận")
         return None
 
     try:
         size_matrix = int(size_entry.get())
         if(size_matrix <= 0):
-            mb.showerror("Error!","The size of the matrix must be positive integers")
+            mb.showerror("Lỗi!","Kích thước của ma trận phải là số nguyên dương")
             raise ValueError
         
         return size_matrix
@@ -78,74 +78,91 @@ def get_value_matrix(frame_matrix):
             global entry_A, entry_B, entry_C, matrix_A, matrix_B, vector_C
             if frame_matrix.winfo_exists() and frame_matrix is frame_matrix_A:
                 if 'entry_A' not in globals():
-                    mb.showerror("Error", "Please create matrix 1 first")
+                    mb.showerror("Lỗi", "Vui lòng tạo ma trận 1 trước")
                     return False
                 if entry_A is None:
-                    mb.showerror("Error", "Please create matrix 1 first")
+                    mb.showerror("Lỗi", "Vui lòng tạo ma trận 1 trước")
                     return False
                 matrix_A = [[int(entry_A[row][col].get()) for col in range(size_matrix)] for row in range(size_matrix)]
             elif frame_matrix.winfo_exists() and frame_matrix is frame_matrix_B:
                 if 'entry_B' not in globals():
-                    mb.showerror("Error", "Please create matrix 2 first")
+                    mb.showerror("Lỗi", "Vui lòng tạo ma trận 2 trước")
                     return False
                 if entry_B is None:
-                    mb.showerror("Error", "Please create matrix 2 first")
+                    mb.showerror("Lỗi", "Vui lòng tạo ma trận 2 trước")
                     return False
                 matrix_B = [[int(entry_B[row][col].get()) for col in range(size_matrix)] for row in range(size_matrix)]
             elif frame_matrix.winfo_exists() and frame_matrix is frame_matrix_C:
                 if 'entry_C' not in globals():
-                    mb.showerror("Error", "Please create vector result first")
+                    mb.showerror("Lỗi", "Vui lòng tạo vector kết quả trước")
                     return False
                 if entry_C is None:
-                    mb.showerror("Error", "Please create vector result first")
+                    mb.showerror("Lỗi", "Vui lòng tạo vector kết quả trước")
                     return False
                 vector_C = [int(entry_C[row].get()) for row in range(size_matrix)]
             else:
                 return False
         except ValueError:
-            mb.showerror("Error", "Please enter valid numerical values for all entries")
+            mb.showerror("Lỗi", "Vui lòng nhập giá trị số hợp lệ cho tất cả các mục")
             return False
         return True
 
 def matrix_calculation(n):
     if n == 1:
-        mb.showinfo("Announcement!", "You choose to calculate the basic values of matrix 1 including: rank, trace, determinant, inverse, power, eigen value and eigen vector of matrix")
+        mb.showinfo("Thông báo!", "Bạn chọn tính các giá trị cơ bản của ma trận 1 gồm: hạng, tổng đường chéo, định thức, nghịch đảo, lũy thừa, giá trị riêng và vectơ riêng của ma trận")
         if get_value_matrix(frame_matrix_A):
             try:
                 x = np.linalg.inv(matrix_A)
-                text_inv = f"- Inverse of matrix 1:\n {x}\n"
+                text_inv = f"- Ma trận nghịch đảo 1:\n {x}\n"
             except np.linalg.LinAlgError:
-                text_inv = "- Inverse of matrix 1 is not exist"
-            label_resutl_A.config(text=f"- Rank of matrix 1: {np.linalg.matrix_rank(matrix_A)}\n"
-                                + f"- Trace of matrix 1: {np.trace(matrix_A)}\n"
-                                + f"- Determinant of a matrix 1: {np.round(np.linalg.det(matrix_A), 2)}\n"
+                text_inv = "- Ma trận nghịch đảo 1 không tồn tại"
+            label_resutl_A.config(text=f"- Bậc ma trận 1: {np.linalg.matrix_rank(matrix_A)}\n"
+                                + f"- Tổng đường chéo ma trận 1: {np.trace(matrix_A)}\n"
+                                + f"- Định thức ma trận 1: {np.round(np.linalg.det(matrix_A), 2)}\n"
                                 + text_inv
-                                + f"- An eigen value of a matrix 1:\n {np.linalg.eig(matrix_A)[0]}\n"
-                                + f"- An eigen vector of a matrix 1:\n {np.linalg.eig(matrix_A)[1]}\n")
-    if n == 2:
-        mb.showinfo("Announcement!", "You choose to calculate the basic values of matrix 2 including: rank, trace, determinant, inverse, power, eigen value and eigen vector of matrix")
+                                + f"- Giá trị ma trận  1:\n {np.linalg.eig(matrix_A)[0]}\n"
+                                + f"- Vector ma trận 1:\n {np.linalg.eig(matrix_A)[1]}\n")
+    elif n == 2:
+        mb.showinfo("Thông báo!", "Bạn chọn tính các giá trị cơ bản của ma trận 2 gồm: hạng, tổng đường chéo, định thức, nghịch đảo, lũy thừa, giá trị riêng và vectơ riêng của ma trận")
         if get_value_matrix(frame_matrix_B):
             try:
                 x = np.linalg.inv(matrix_B)
-                text_inv = f"- Inverse of matrix 2:\n {x}\n"
+                text_inv = f"- Ma trận nghịch đảo 2:\n {x}\n"
             except np.linalg.LinAlgError:
-                text_inv = "- Inverse of matrix 2 is not exist"
-            label_resutl_B.config(text=f"- Rank of matrix 2: {np.linalg.matrix_rank(matrix_B)}\n"
-                                + f"- Trace of matrix 2: {np.trace(matrix_B)}\n"
-                                + f"- Determinant of a matrix 2: {np.round(np.linalg.det(matrix_B), 2)}\n"
+                text_inv = "- Ma trận nghịch đảo 2 không tồn tại"
+            label_resutl_B.config(text=f"- Bậc ma trận 2: {np.linalg.matrix_rank(matrix_B)}\n"
+                                + f"- Tổng đường chéo 2: {np.trace(matrix_B)}\n"
+                                + f"- Định thức ma trận 2: {np.round(np.linalg.det(matrix_B), 2)}\n"
                                 + text_inv
-                                + f"- An eigen value of a matrix 2:\n {np.linalg.eig(matrix_B)[0]}\n"
-                                + f"- An eigen vector of a matrix 2:\n {np.linalg.eig(matrix_B)[1]}\n")
-            
-        
+                                + f"- Giá trị ma trận 2:\n {np.linalg.eig(matrix_B)[0]}\n"
+                                + f"- Vector ma trận 2:\n {np.linalg.eig(matrix_B)[1]}\n")
+    if n == 3:
+        mb.showinfo("Thông báo!", "Bạn đã chọn tính tích hai ma trận")
+        if get_value_matrix(frame_matrix_A) and get_value_matrix(frame_matrix_B):
+            try:
+                result = np.dot(matrix_A, matrix_B)
+                label_result_D.config(text="Kết quả tính tích hai ma trận:\n" + str(result))
+            except ValueError:
+                mb.showerror("Lỗi",
+                             "Hai ma trận không thể nhân với nhau vì số cột của ma trận thứ nhất không bằng số hàng của ma trận thứ hai")
+    if n == 4:
+        mb.showinfo("Thông báo!", "Bạn đã chọn tính tích vô hướng hai vector")
+        if get_value_matrix(frame_matrix_A) and get_value_matrix(frame_matrix_B):
+            try:
+                vector_A = np.squeeze(matrix_A)
+                vector_B = np.squeeze(matrix_B)
+                result = np.dot(vector_A, vector_B)
+                label_result_E.config(text="Kết quả tích vô hướng 2 vector:\n" + str(result))
+            except ValueError:
+                mb.showerror("Lỗi", "Hai vector không cùng kích thước")
 
 w = Tk()
-w.title("Application to support Linear Algebra")
+w.title("Ứng dụng hỗ trợ môn học ĐSTT")
 
 frame_choose = Frame(w)
 frame_choose.grid(row=0, columnspan=3)
 
-size_label = Label(frame_choose, text="Entry size of matrix:")
+size_label = Label(frame_choose, text="Kích thước ma trận:")
 size_label.grid(row=0, column=0)
 size_entry = Entry(frame_choose)
 size_entry.grid(row=0, column=1)
@@ -153,13 +170,13 @@ size_entry.grid(row=0, column=1)
 frame_A = Frame(w)
 frame_A.grid(row=1, column=0, padx=5, pady=5)
 
-creat_A = Button(frame_A, text="Creat matrix 1", command=lambda: creat_matrix(frame_matrix_A, label_A))
+creat_A = Button(frame_A, text="Tạo ma trận 1", command=lambda: creat_matrix(frame_matrix_A, label_A))
 creat_A.grid(row=0, column=0)
 
-erase_A = Button(frame_A, text="Erase matrix 1", command=lambda: erase_matrix(frame_matrix_A, label_A, 'A', label_resutl_A))
+erase_A = Button(frame_A, text="Xoá ma trận 1", command=lambda: erase_matrix(frame_matrix_A, label_A, 'A', label_resutl_A))
 erase_A.grid(row=0, column=1)
 
-label_A = Label(frame_A, text="Entry matrix 1:")
+label_A = Label(frame_A, text="Nhập ma trận 1:")
 
 
 frame_matrix_A = Frame(frame_A)
@@ -168,13 +185,13 @@ frame_matrix_A.grid(row=2, columnspan=2)
 frame_B = Frame(w)
 frame_B.grid(row=1, column=1, padx=5, pady=5)
 
-creat_B = Button(frame_B, text="Creat matrix 2", command=lambda: creat_matrix(frame_matrix_B, label_B))
+creat_B = Button(frame_B, text="Tạo ma trận 2", command=lambda: creat_matrix(frame_matrix_B, label_B))
 creat_B.grid(row=0, column=0)
 
-erase_B = Button(frame_B, text="Erase matrix 2", command=lambda: erase_matrix(frame_matrix_B, label_B, 'B', label_resutl_B))
+erase_B = Button(frame_B, text="Xoá ma trận 2", command=lambda: erase_matrix(frame_matrix_B, label_B, 'B', label_resutl_B))
 erase_B.grid(row=0, column=1)
 
-label_B = Label(frame_B, text="Entry matrix 2:")
+label_B = Label(frame_B, text="Nhập ma trận 2:")
 
 frame_matrix_B = Frame(frame_B)
 frame_matrix_B.grid(row=2, columnspan=2)
@@ -182,13 +199,13 @@ frame_matrix_B.grid(row=2, columnspan=2)
 frame_C = Frame(w)
 frame_C.grid(row=1, column=2, padx=5, pady=5)
 
-creat_C = Button(frame_C, text="Creat vector result", command=lambda: creat_matrix(frame_matrix_C, label_C))
+creat_C = Button(frame_C, text="Tạo vector kết quả", command=lambda: creat_matrix(frame_matrix_C, label_C))
 creat_C.grid(row=0, column=0)
 
-erase_C = Button(frame_C, text="Erase vector result", command=lambda: erase_matrix(frame_matrix_C, label_C, 'C'))
+erase_C = Button(frame_C, text="Xoá vector kết quả", command=lambda: erase_matrix(frame_matrix_C, label_C, 'C'))
 erase_C.grid(row=0, column=1)
 
-label_C = Label(frame_C, text="Entry vector result:")
+label_C = Label(frame_C, text="Nhập vector kết quả:")
 
 frame_matrix_C = Frame(frame_C)
 frame_matrix_C.grid(row=2, columnspan=2)
@@ -196,16 +213,30 @@ frame_matrix_C.grid(row=2, columnspan=2)
 frame_choose_cal = Frame(w)
 frame_choose_cal.grid(row=2, columnspan=2)
 
-button_cal_basic = Button(frame_choose_cal, text="Cal matrix 1", command=lambda: matrix_calculation(1))
+button_cal_basic = Button(frame_choose_cal, text="Tính ma trận 1", command=lambda: matrix_calculation(1))
 button_cal_basic.grid(row=0, column=0, padx=5, pady=5)
 
-button_cal_basic = Button(frame_choose_cal, text="Cal matrix 2", command=lambda: matrix_calculation(2))
+button_cal_basic = Button(frame_choose_cal, text="Tính ma trận 2", command=lambda: matrix_calculation(2))
 button_cal_basic.grid(row=0, column=1, padx=5, pady=5)
+
+#nút tính tích 2 ma trận
+button_cal_multiply = Button(frame_choose_cal, text="Tính tích hai ma trận", command=lambda: matrix_calculation(3))
+button_cal_multiply.grid(row=0, column=2, padx=5, pady=5)
+#nút tính tích vô hướng
+button_cal_dot_product = Button(frame_choose_cal, text="Tính tích vô hướng", command=lambda: matrix_calculation(4))
+button_cal_dot_product.grid(row=0, column=3, padx=5, pady=5)
 
 label_resutl_A = Label(w, text="", justify='left', font=('Helvetica',10, 'bold'))
 label_resutl_A.grid(row=3, column=0)
 label_resutl_B = Label(w, text="", justify='left', font=('Helvetica',10, 'bold'))
 label_resutl_B.grid(row=3, column=1)
+label_result_D = Label(w, text="", justify='left', font=('Helvetica', 10, 'bold'))
+label_result_D.grid(row=4, column=0, columnspan=3, pady=10)
+label_result_E = Label(w, text="", justify='left', font=('Helvetica', 10, 'bold'))
+label_result_E.grid(row=4, column=1, columnspan=3, pady=10)
+
+
+
 
 w.mainloop()
 
