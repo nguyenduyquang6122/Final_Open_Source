@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tkinter import *
 from tkinter import messagebox as mb
-
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 def get_matrix_size():
     if not size_entry.get():
         mb.showwarning("Cảnh báo!", "Vui lòng nhập giá trị cho kích thước ma trận")
@@ -108,7 +108,31 @@ def get_value_matrix(frame_matrix):
             mb.showerror("Lỗi", "Vui lòng nhập giá trị số hợp lệ cho tất cả các mục")
             return False
         return True
+def draw_graph1(matrix_A_np, vector_C, w,frame_graph):
+    fig, ax = plt.subplots()
+    ax.plot(matrix_A_np, w[0] * matrix_A_np + w[1], 'r-', label='Fitted line')
+    ax.plot(matrix_A_np, vector_C, 'y', label='Original data')
+    ax.legend()
+    ax.set_title('He PT 1')
+    # Thay đổi kích thước của hình vẽ
+    fig.set_size_inches(3, 2)
 
+    canvas = FigureCanvasTkAgg(fig, master=frame_graph)
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+
+def draw_graph2(matrix_B_np, vector_C, w,frame_graph):
+    fig, ax = plt.subplots()
+    ax.plot(matrix_B_np, w[0] * matrix_B_np + w[1], 'r-', label='Fitted line')
+    ax.plot(matrix_B_np, vector_C, 'o', label='Original data')
+    ax.legend()
+    ax.set_title('He PT 2')
+    # Thay đổi kích thước của hình vẽ
+    fig.set_size_inches(3, 2)
+
+    canvas = FigureCanvasTkAgg(fig, master=frame_graph)
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
 def matrix_calculation(n):
     if n == 1:
         mb.showinfo("Thông báo!", "Bạn chọn tính các giá trị cơ bản của ma trận 1 gồm: hạng, tổng đường chéo, định thức, nghịch đảo, lũy thừa, giá trị riêng và vectơ riêng của ma trận")
@@ -159,12 +183,49 @@ def matrix_calculation(n):
     #             label_result_E.config(text="Kết quả tích vô hướng 2 vector:\n" + str(result))
     #         except ValueError:
     #             mb.showerror("Lỗi", "Hai vector không cùng kích thước")
-
+    if n == 4:
+        mb.showinfo("Thông báo!, Bạn sẽ tính nghiệm của phương trình và nghiệm bình phương nhỏ nhất của phương trình 1")
+        if get_value_matrix(frame_matrix_A) and get_value_matrix(frame_matrix_C):
+            if len(matrix_A) == 1 and len(matrix_A[0]) == 1:
+                mb.showerror("Lỗi", "Kích thước của ma trận A phải lớn hơn 1x1.")
+            else:
+                matrix_A_np = np.array(matrix_A)
+                if np.linalg.det(matrix_A_np) != 0:
+                    w = np.linalg.lstsq(matrix_A_np.T, vector_C, rcond=None)[0]
+                    draw_graph1(matrix_A_np, vector_C, w, frame_graph1)
+                    label_result_D.config(
+                        text=f"- Nghiệm của hệ phương trình 1 là:\n {np.linalg.solve(matrix_A, vector_C)}\n"
+                        + f"- Nghiệm bình phương nhỏ nhất \n của hệ phương trình 1 là:\n {w} \n")
+                else:
+                    mb.showerror("Lỗi", "Ma trận A không thể giải được.")
+        else:
+                mb.showerror("Lỗi", "Nhập giá trị cho ma trận A và vector C trước khi tính toán.")
+    if n == 5:
+        mb.showinfo("Thông báo!, Bạn sẽ tính nghiệm của phương trình và nghiệm bình phương nhỏ nhất của phương trình 2")
+        if get_value_matrix(frame_matrix_B) and get_value_matrix(frame_matrix_C):
+            if len(matrix_B) == 1 and len(matrix_B[0]) == 1:
+                mb.showerror("Lỗi", "Kích thước của ma trận B phải lớn hơn 1x1.")
+            else:
+                matrix_B_np = np.array(matrix_B)
+                if np.linalg.det(matrix_B_np) != 0:
+                    w = np.linalg.lstsq(matrix_B_np.T, vector_C, rcond=None)[0]
+                    draw_graph2(matrix_B_np, vector_C, w,frame_graph2)
+                    label_result_E.config(
+                        text=f"- Nghiệm của hệ phương trình 2 là:\n {np.linalg.solve(matrix_B, vector_C)}\n"
+                             + f"- Nghiệm bình phương nhỏ nhất \n  của hệ phương trình 2 là:\n {w} \n")
+                else:
+                    mb.showerror("Lỗi", "Ma trận B không thể giải được.")
+        else:
+            mb.showerror("Lỗi", "Nhập giá trị cho ma trận B và vector C trước khi tính toán.")
 w = Tk()
 w.title("Ứng dụng hỗ trợ môn học ĐSTT")
 
 frame_choose = Frame(w)
 frame_choose.grid(row=0, columnspan=3)
+frame_graph1 = Frame(w)
+frame_graph1.grid(row=4, columnspan=4, rowspan=2)  
+frame_graph2 = Frame(w)
+frame_graph2.grid(row=6, columnspan=4, rowspan=2)
 
 size_label = Label(frame_choose, text="Kích thước ma trận:")
 size_label.grid(row=0, column=0)
@@ -226,6 +287,11 @@ button_cal_basic.grid(row=0, column=1, padx=5, pady=5)
 button_cal_multiply = Button(frame_choose_cal, text="Tính tích hai ma trận", command=lambda: matrix_calculation(3))
 button_cal_multiply.grid(row=0, column=2, padx=5, pady=5)
 
+button_cal_equations1 = Button(frame_choose_cal, text="giải hệ phương trình 1", command=lambda: matrix_calculation(4))
+button_cal_equations1.grid(row=0, column=3, padx=5, pady=5)
+
+button_cal_equations2 = Button(frame_choose_cal, text="giải hệ phương trình 2", command=lambda: matrix_calculation(5))
+button_cal_equations2.grid(row=0, column=4, padx=5, pady=5)
 
 label_resutl_A = Label(w, text="", justify='left', font=('Helvetica',10, 'bold'))
 label_resutl_A.grid(row=3, column=0)
@@ -233,7 +299,10 @@ label_resutl_B = Label(w, text="", justify='left', font=('Helvetica',10, 'bold')
 label_resutl_B.grid(row=3, column=1)
 label_result_X = Label(w, text="", justify='left', font=('Helvetica', 10, 'bold'))
 label_result_X.grid(row=3, column=2)
-
+label_result_D = Label(w, text="", justify='left', font=('Helvetica', 10, 'bold'))
+label_result_D.grid(row=4, column=0)
+label_result_E = Label(w, text="", justify='left', font=('Helvetica', 10, 'bold'))
+label_result_E.grid(row=6, column=0)
 
 
 w.mainloop()
