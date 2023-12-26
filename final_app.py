@@ -136,8 +136,8 @@ def matrix_calculation(n):
                                 + f"- Tổng đường chéo ma trận 1: {np.trace(matrix_A)}\n"
                                 + f"- Định thức ma trận 1: {np.round(np.linalg.det(matrix_A), 2)}\n"
                                 + text_inv
-                                + f"- Giá trị ma trận  1:\n {np.linalg.eig(matrix_A)[0]}\n"
-                                + f"- Vector ma trận 1:\n {np.linalg.eig(matrix_A)[1]}\n")
+                                + f"- Giá trị riêng của ma trận  1:\n {np.linalg.eig(matrix_A)[0]}\n"
+                                + f"- Vector riêng của ma trận 1:\n {np.linalg.eig(matrix_A)[1]}\n")
     elif n == 2:
         mb.showinfo("Thông báo!", "Bạn chọn tính các giá trị cơ bản của ma trận 2 gồm: hạng, tổng đường chéo, định thức, nghịch đảo, lũy thừa, giá trị riêng và vectơ riêng của ma trận")
         if get_value_matrix(frame_matrix_B):
@@ -150,8 +150,8 @@ def matrix_calculation(n):
                                 + f"- Tổng đường chéo 2: {np.trace(matrix_B)}\n"
                                 + f"- Định thức ma trận 2: {np.round(np.linalg.det(matrix_B), 2)}\n"
                                 + text_inv
-                                + f"- Giá trị ma trận 2:\n {np.linalg.eig(matrix_B)[0]}\n"
-                                + f"- Vector ma trận 2:\n {np.linalg.eig(matrix_B)[1]}\n")
+                                + f"- Giá trị riêng của ma trận 2:\n {np.linalg.eig(matrix_B)[0]}\n"
+                                + f"- Vector riêng của ma trận 2:\n {np.linalg.eig(matrix_B)[1]}\n")
     if n == 3:
         mb.showinfo("Thông báo!", "Bạn đã chọn tính tích hai ma trận")
         try:

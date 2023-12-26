@@ -1,0 +1,42 @@
+Khái niệm thư viện Numpy:
+- Numpy (Numeric Python): là một thư viện toán học phổ biến và mạnh mẽ của Python. Cho phép làm việc hiệu quả với ma trận và mảng,
+đặc biệt là dữ liệu ma trận và mảng lớn với tốc độ xử lý nhanh hơn nhiều lần khi chỉ sử dụng “core Python” đơn thuần.
+- Một số chức năng chính của thư viện Numpy
+    Mảng nhiều chiều: mảng một chiều, mảng hai chiều, mảng ba chiều,...
+    Phép toán Toán học: phép cộng, trừ, nhân, chia, và các hàm toán học như sin, cos, exp, log, sqrt,...
+    Thao tác hình dạng, sắp xếp, chọn
+    Biến đổi Fourier rời rạc
+    Hỗ trợ đại số tuyến tính cơ bản: tìm định thức, giá trị riêng, giải phương trình tuyến tính,...
+    Các phép toán thống kê cơ bản: mean, median, sum, std, var, min, max,...
+    Mô phỏng ngẫu nhiên
+
+Phân tích chức năng của đoạn mã gốc:
+import numpy as np
+
+#Tạo mảng 2 chiều
+a = np.array([[2,3],[4,5]])
+b = np.array([[11,12],[13,14]])
+#Tạo mảng 1 chiều
+c = np.array([1,2])
+#In ra tích 2 ma trận 'a' và 'b'. Kết quả là một mảng 2 chiều
+print("Tích hai ma trận: ",np.dot(a,b))
+#In ra tích vô hướng hai vector 'a' và 'b'. Kết quả là một số vô hướng
+print("Tích vô hướng hai vector: ",np.vdot(a,b))
+#In ra định thức của ma trận 'a'. Kết quả là một số thực
+print("Định thức: ",np.linalg.det(a))
+#In ra ma trận nghịch đảo của ma trận 'a'. Kết quả là một ma trận nghịch đảo
+print("Ma trận nghịch đảo: ",np.linalg.inv(a))
+#In ra nghiệm của hệ phương trình ma trận 'a' và vecter kết quả 'c'. Kết quả là một vector nghiệm
+print("Giải hệ phương trình: ",np.linalg.solve(a,c))
+
+Ý tưởng cải tiến/ phát triển từ đoạn mã gốc:
+- Cải tiến tạo được mảng nhiều chiều ma trận 'a' và ma trận 'b'
+- Cải tiến tính định thức, ma trận nghịch đảo của ma trận 'b'
+- Phát triển tính hạng, tổng đường chéo, giá trị riêng, vector riêng của ma trận 'a' và 'b'
+- Cải tiến tính nghiệm của hệ phương trình ma trận 'b' và vector kết quả 'c'
+
+Ứng dụng đã cải tiến/ phát triển: Ứng dụng hỗ trợ môn học Đại số tuyến tính
+    Chức năng:
+    Thuật toán:
+
+Kiểm thử và đánh giá
