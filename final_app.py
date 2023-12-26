@@ -108,12 +108,8 @@ def get_value_matrix(frame_matrix):
         except ValueError:
             mb.showerror("Lỗi", "Vui lòng nhập giá trị số hợp lệ cho tất cả các mục")
             return False
-        return True
-    
-def get_rows_rols(matrix_1, matrix_2):
-    num_cols_1 = len(matrix_1[0])
-    num_rows_2 = len(matrix_2)
-    return num_cols_1, num_rows_2
+        return True  
+
 def save_all_results_to_file(file_path, results):
     try:
         with open(file_path, 'w', encoding='utf-8') as file:
@@ -122,11 +118,31 @@ def save_all_results_to_file(file_path, results):
         mb.showinfo("Thông báo!", f"Tất cả kết quả đã được lưu vào file {file_path}")
     except Exception as e:
         mb.showerror("Lỗi", f"Có lỗi xảy ra khi lưu file: {e}")
-        
+
+def save_file():
+    mb.showinfo("Thông báo!", "Bạn đã chọn tính và lưu kết quả vào file")
+    try:
+        results_dict = {
+            "Các kết quả tính toán cơ bản ma trận A": label_resutl_A.cget("text"),
+            "Các kết quả tính toán cơ bản ma trận B": label_resutl_B.cget("text"),
+            "Kết quả tích hai ma trận và tích vô hướng hai ma trận": label_result_C.cget("text"),
+            "Kết quả của hệ phương trình A": label_result_D.cget("text"),
+            "Kết quả của hệ phương trình B": label_result_E.cget("text"),
+            }
+        save_all_results_to_file("all_results.txt", results_dict)
+    except np.linalg.LinAlgError:
+        mb.showerror("Lỗi", "Có lỗi xảy ra trong quá trình tính toán")
+
+def exit_app():
+    w.quit()
+
+current_cal = None         
 def matrix_calculation(n):
+    global current_cal
     if n == 1:
         mb.showinfo("Thông báo!", "Bạn chọn tính các giá trị cơ bản của ma trận 1 gồm: hạng, tổng đường chéo, định thức, nghịch đảo, lũy thừa, giá trị riêng và vectơ riêng của ma trận")
         if get_value_matrix(frame_matrix_A):
+            current_cal = n
             try:
                 x = np.linalg.inv(matrix_A)
                 text_inv = f"- Ma trận nghịch đảo 1:\n {x}\n"
@@ -141,6 +157,7 @@ def matrix_calculation(n):
     elif n == 2:
         mb.showinfo("Thông báo!", "Bạn chọn tính các giá trị cơ bản của ma trận 2 gồm: hạng, tổng đường chéo, định thức, nghịch đảo, lũy thừa, giá trị riêng và vectơ riêng của ma trận")
         if get_value_matrix(frame_matrix_B):
+            current_cal = n
             try:
                 x = np.linalg.inv(matrix_B)
                 text_inv = f"- Ma trận nghịch đảo 2:\n {x}\n"
@@ -156,6 +173,7 @@ def matrix_calculation(n):
         mb.showinfo("Thông báo!", "Bạn đã chọn tính tích hai ma trận")
         try:
             if get_value_matrix(frame_matrix_A) and get_value_matrix(frame_matrix_B):
+                current_cal = n
                 result_1 = np.dot(matrix_A, matrix_B)
                 result_2 = np.vdot(matrix_A, matrix_B)
                 label_result_C.config(text=f"-Tích hai ma trận:\n {result_1}\n"
@@ -171,6 +189,7 @@ def matrix_calculation(n):
                     mb.showerror("Lỗi", "Kích thước của ma trận A phải lớn hơn 1x1.")
                 else:
                     if np.linalg.det(matrix_A) != 0:
+                        current_cal = n
                         nghiem = np.linalg.solve(matrix_A, vector_C)
                         label_nghiem = ""
                         for i in range(0, len(nghiem)):
@@ -190,6 +209,7 @@ def matrix_calculation(n):
                     mb.showerror("Lỗi", "Kích thước của ma trận B phải lớn hơn 1x1.")
                 else:
                     if np.linalg.det(matrix_B) != 0:
+                        current_cal = n
                         nghiem = np.linalg.solve(matrix_B, vector_C)
                         label_nghiem = ""
                         for i in range(0, len(nghiem)):
@@ -200,19 +220,11 @@ def matrix_calculation(n):
         except:
             mb.showerror("Lỗi",
                              "Hai ma trận không thể nhân với nhau vì số cột của ma trận thứ nhất không bằng số hàng của ma trận thứ hai")
-    if n == 6:
-        mb.showinfo("Thông báo!", "Bạn đã chọn tính và lưu kết quả vào file")
-        try:
-            results_dict = {
-                "Các kết quả tính toán cơ bản ma trận A": label_resutl_A.cget("text"),
-                "Các kết quả tính toán cơ bản ma trận B": label_resutl_B.cget("text"),
-                "Kết quả tích hai ma trận và tích vô hướng hai ma trận": label_result_C.cget("text"),
-                "Kết quả của hệ phương trình A": label_result_D.cget("text"),
-                "Kết quả của hệ phương trình B": label_result_E.cget("text"),
-                }
-            save_all_results_to_file("all_results.txt", results_dict)
-        except np.linalg.LinAlgError:
-            mb.showerror("Lỗi", "Có lỗi xảy ra trong quá trình tính toán")
+    if current_cal in [1, 2, 3, 4, 5]:
+        button_save.config(state=NORMAL)
+    else:
+        button_save.config(state=DISABLED)
+
 w = Tk()
 w.title("Ứng dụng hỗ trợ môn học ĐSTT")
 
@@ -223,6 +235,7 @@ size_label = Label(frame_choose, text="Kích thước ma trận:", font=('Helvet
 size_label.grid(row=0, column=0, padx=20)
 size_entry = Entry(frame_choose)
 size_entry.grid(row=0, column=1)
+
 
 frame_A = Frame(w)
 frame_A.grid(row=1, column=0, padx=5, pady=5)
@@ -285,9 +298,12 @@ button_cal_equations1.grid(row=0, column=3, padx=5, pady=5)
 button_cal_equations2 = Button(frame_choose_cal, text="Giải hệ phương trình 2", font=('Helvetica',10, 'bold'), bg='#90e0ef', command=lambda: matrix_calculation(5))
 button_cal_equations2.grid(row=0, column=4, padx=5, pady=5)
 
-button_save = Button(frame_choose_cal, text="Lưu kết quả vào file",font=('Helvetica',10, 'bold'), bg='#90e0ef',command=lambda: matrix_calculation(6))
-button_save.grid(row=0, column=5, padx=5, pady=5)
-                               
+button_save = Button(w, text="Lưu kết quả vào file",font=('Helvetica',10, 'bold'), bg='#fdf0d5', fg='#780000',command=save_file, state=DISABLED)
+button_save.grid(row=5, columnspan=3)
+
+button_quit = Button(w, text="Thoát ứng dụng", font=('Helvetica',10, 'bold'), bg='#780000', fg='#fdf0d5', command=exit_app)
+button_quit.grid(row=0, column=2)
+
 label_resutl_A = Label(w, text="", justify='left', font=('Helvetica', 12, 'bold'))
 label_resutl_A.grid(row=3, column=0)
 label_resutl_B = Label(w, text="", justify='left', font=('Helvetica', 12, 'bold'))
