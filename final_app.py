@@ -56,13 +56,22 @@ def creat_matrix(frame_matrix, label):
                 for col in range(size_matrix):
                     entry_B[row][col].grid(row=row, column=col, padx=5, pady=5)
 
-def erase_matrix(frame_matrix, label, matrix_type, result_label):
+def erase_matrix(frame_matrix, label, matrix_type):
     for widget in frame_matrix.winfo_children():
         widget.destroy()
     label.grid_forget()
-    if frame_matrix is not frame_matrix_C:
+    if frame_matrix is frame_matrix_A:
+        label_resutl_A.config(text="")
         label_result_C.config(text="")
-    result_label.config(text="")
+        label_result_D.config(text="")
+    elif frame_matrix is frame_matrix_B:
+        label_resutl_B.config(text="")
+        label_result_C.config(text="")
+        label_result_E.config(text="")
+    elif frame_matrix is frame_matrix_C:
+        label_result_C.config(text="")
+        label_result_D.config(text="")
+        label_result_E.config(text="")
     global entry_A, entry_B, entry_C, matrix_A, matrix_B, vector_C
     if matrix_type == 'A':
         entry_A = None
@@ -243,7 +252,7 @@ frame_A.grid(row=1, column=0, padx=5, pady=5)
 creat_A = Button(frame_A, text="Tạo ma trận 1", font=('Helvetica',10, 'bold'), bg='#06d6a0', command=lambda: creat_matrix(frame_matrix_A, label_A))
 creat_A.grid(row=0, column=0)
 
-erase_A = Button(frame_A, text="Xoá ma trận 1", font=('Helvetica',10, 'bold'), bg='#e63946', command=lambda: erase_matrix(frame_matrix_A, label_A, 'A', label_resutl_A))
+erase_A = Button(frame_A, text="Xoá ma trận 1", font=('Helvetica',10, 'bold'), bg='#e63946', command=lambda: erase_matrix(frame_matrix_A, label_A, 'A'))
 erase_A.grid(row=0, column=1)
 
 label_A = Label(frame_A, text="Nhập ma trận 1:", font=('Helvetica',10, 'bold'))
@@ -258,7 +267,7 @@ frame_B.grid(row=1, column=1, padx=5, pady=5)
 creat_B = Button(frame_B, text="Tạo ma trận 2", font=('Helvetica',10, 'bold'), bg='#06d6a0', command=lambda: creat_matrix(frame_matrix_B, label_B))
 creat_B.grid(row=0, column=0)
 
-erase_B = Button(frame_B, text="Xoá ma trận 2", font=('Helvetica',10, 'bold'), bg='#e63946', command=lambda: erase_matrix(frame_matrix_B, label_B, 'B', label_resutl_B))
+erase_B = Button(frame_B, text="Xoá ma trận 2", font=('Helvetica',10, 'bold'), bg='#e63946', command=lambda: erase_matrix(frame_matrix_B, label_B, 'B'))
 erase_B.grid(row=0, column=1)
 
 label_B = Label(frame_B, text="Nhập ma trận 2:", font=('Helvetica',10, 'bold'))
@@ -272,7 +281,7 @@ frame_C.grid(row=1, column=2, padx=5, pady=5)
 creat_C = Button(frame_C, text="Tạo vector kết quả", font=('Helvetica',10, 'bold'), bg='#06d6a0', command=lambda: creat_matrix(frame_matrix_C, label_C))
 creat_C.grid(row=0, column=0)
 
-erase_C = Button(frame_C, text="Xoá vector kết quả", font=('Helvetica',10, 'bold'), bg='#e63946', command=lambda: erase_matrix(frame_matrix_C, label_C, 'C', label_result_C))
+erase_C = Button(frame_C, text="Xoá vector kết quả", font=('Helvetica',10, 'bold'), bg='#e63946', command=lambda: erase_matrix(frame_matrix_C, label_C, 'C'))
 erase_C.grid(row=0, column=1)
 
 label_C = Label(frame_C, text="Nhập vector kết quả:", font=('Helvetica',10, 'bold'))
