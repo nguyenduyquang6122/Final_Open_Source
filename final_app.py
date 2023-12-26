@@ -204,11 +204,11 @@ def matrix_calculation(n):
         mb.showinfo("Thông báo!", "Bạn đã chọn tính và lưu kết quả vào file")
         try:
             results_dict = {
-                "label_resutl_A": label_resutl_A.cget("text"),
-                "label_resutl_B": label_resutl_B.cget("text"),
-                "label_resutl_C": label_result_C.cget("text"),
-                "label_resutl_D": label_result_D.cget("text"),
-                "label_resutl_E": label_result_E.cget("text"),
+                "Các kết quả tính toán cơ bản ma trận A": label_resutl_A.cget("text"),
+                "Các kết quả tính toán cơ bản ma trận B": label_resutl_B.cget("text"),
+                "Kết quả tích hai ma trận và tích vô hướng hai ma trận": label_result_C.cget("text"),
+                "Kết quả của hệ phương trình A": label_result_D.cget("text"),
+                "Kết quả của hệ phương trình B": label_result_E.cget("text"),
                 }
             save_all_results_to_file("all_results.txt", results_dict)
         except np.linalg.LinAlgError:
