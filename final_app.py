@@ -114,7 +114,15 @@ def get_rows_rols(matrix_1, matrix_2):
     num_cols_1 = len(matrix_1[0])
     num_rows_2 = len(matrix_2)
     return num_cols_1, num_rows_2
-
+def save_all_results_to_file(file_path, results):
+    try:
+        with open(file_path, 'w', encoding='utf-8') as file:
+            for label, result_text in results.items():
+                file.write(f"{label}:\n{result_text}\n\n")
+        mb.showinfo("Thông báo!", f"Tất cả kết quả đã được lưu vào file {file_path}")
+    except Exception as e:
+        mb.showerror("Lỗi", f"Có lỗi xảy ra khi lưu file: {e}")
+        
 def matrix_calculation(n):
     if n == 1:
         mb.showinfo("Thông báo!", "Bạn chọn tính các giá trị cơ bản của ma trận 1 gồm: hạng, tổng đường chéo, định thức, nghịch đảo, lũy thừa, giá trị riêng và vectơ riêng của ma trận")
@@ -192,7 +200,20 @@ def matrix_calculation(n):
         except:
             mb.showerror("Lỗi",
                              "Hai ma trận không thể nhân với nhau vì số cột của ma trận thứ nhất không bằng số hàng của ma trận thứ hai")
-    
+    if n == 6:
+        mb.showinfo("Thông báo!", "Bạn đã chọn tính và lưu kết quả vào file")
+        if get_value_matrix(frame_matrix_A) and get_value_matrix(frame_matrix_C) and get_value_matrix(frame_matrix_B):
+            try:
+                results_dict = {
+                    "label_resutl_A": label_resutl_A.cget("text"),
+                    "label_resutl_B": label_resutl_B.cget("text"),
+                    "label_resutl_C": label_result_C.cget("text"),
+                    "label_resutl_D": label_result_D.cget("text"),
+                    "label_resutl_E": label_result_E.cget("text"),
+                }
+                save_all_results_to_file("all_results.txt", results_dict)
+            except np.linalg.LinAlgError:
+                mb.showerror("Lỗi", "Có lỗi xảy ra trong quá trình tính toán")
 w = Tk()
 w.title("Ứng dụng hỗ trợ môn học ĐSTT")
 
@@ -265,6 +286,9 @@ button_cal_equations1.grid(row=0, column=3, padx=5, pady=5)
 button_cal_equations2 = Button(frame_choose_cal, text="Giải hệ phương trình 2", font=('Helvetica',10, 'bold'), bg='#90e0ef', command=lambda: matrix_calculation(5))
 button_cal_equations2.grid(row=0, column=4, padx=5, pady=5)
 
+button_save = Button(frame_choose_cal, text="Lưu kết quả vào file",font=('Helvetica',10, 'bold'), bg='#90e0ef',command=lambda: matrix_calculation(6))
+button_save.grid(row=0, column=5, padx=5, pady=5)
+                               
 label_resutl_A = Label(w, text="", justify='left', font=('Helvetica', 12, 'bold'))
 label_resutl_A.grid(row=3, column=0)
 label_resutl_B = Label(w, text="", justify='left', font=('Helvetica', 12, 'bold'))
