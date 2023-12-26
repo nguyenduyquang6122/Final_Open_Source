@@ -202,18 +202,17 @@ def matrix_calculation(n):
                              "Hai ma trận không thể nhân với nhau vì số cột của ma trận thứ nhất không bằng số hàng của ma trận thứ hai")
     if n == 6:
         mb.showinfo("Thông báo!", "Bạn đã chọn tính và lưu kết quả vào file")
-        if get_value_matrix(frame_matrix_A) and get_value_matrix(frame_matrix_C) and get_value_matrix(frame_matrix_B):
-            try:
-                results_dict = {
-                    "label_resutl_A": label_resutl_A.cget("text"),
-                    "label_resutl_B": label_resutl_B.cget("text"),
-                    "label_resutl_C": label_result_C.cget("text"),
-                    "label_resutl_D": label_result_D.cget("text"),
-                    "label_resutl_E": label_result_E.cget("text"),
+        try:
+            results_dict = {
+                "label_resutl_A": label_resutl_A.cget("text"),
+                "label_resutl_B": label_resutl_B.cget("text"),
+                "label_resutl_C": label_result_C.cget("text"),
+                "label_resutl_D": label_result_D.cget("text"),
+                "label_resutl_E": label_result_E.cget("text"),
                 }
-                save_all_results_to_file("all_results.txt", results_dict)
-            except np.linalg.LinAlgError:
-                mb.showerror("Lỗi", "Có lỗi xảy ra trong quá trình tính toán")
+            save_all_results_to_file("all_results.txt", results_dict)
+        except np.linalg.LinAlgError:
+            mb.showerror("Lỗi", "Có lỗi xảy ra trong quá trình tính toán")
 w = Tk()
 w.title("Ứng dụng hỗ trợ môn học ĐSTT")
 
